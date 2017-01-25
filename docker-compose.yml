@@ -14,16 +14,16 @@ services:
         environment:
             NEWRELIC_KEY: ""
 
-            POSTGRES_HOST_DB1: 172.18.0.1
-            POSTGRES_NAME_DB1: TEST-DB-1
-            POSTGRES_PORT_DB1: 5432
-            POSTGRES_USER_DB1: db_user
-            POSTGRES_PASS_DB1: db_pass
-            POSTGRES_DBNAME_DB1: db_db
+            NPOSTGRES_HOST_DB1: 172.18.0.1
+            NPOSTGRES_NAME_DB1: TEST-DB-1
+            NPOSTGRES_PORT_DB1: 5432
+            NPOSTGRES_USER_DB1: db_user
+            NPOSTGRES_PASS_DB1: db_pass
+            NPOSTGRES_DBNAME_DB1: db_db
 
-            REDIS_HOST_RD: 172.18.0.1
-            REDIS_NAME_RD: TEST-REDIS-1
-            REDIS_PORT_RD: 6379
+            NREDIS_HOST_RD: 172.18.0.1
+            NREDIS_NAME_RD: TEST-REDIS-1
+            NREDIS_PORT_RD: 6379
         volumes_from:
             - sources:rw
         depends_on:

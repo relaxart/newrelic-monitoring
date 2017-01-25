@@ -30,8 +30,8 @@ def read_env_to_list(prefix):
 	return result
 
 configuration = {}
-configuration['postgres'] = read_env_to_list("POSTGRES_")	
-configuration['redis'] = read_env_to_list("REDIS_")	
+configuration['postgres'] = read_env_to_list("NPOSTGRES_")
+configuration['redis'] = read_env_to_list("NREDIS_")
 
 template = templateEnv.get_template("config.template.yaml")
 templateVars = { 
