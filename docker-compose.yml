@@ -1,0 +1,60 @@
+version: '2'
+
+networks:
+    database:
+        driver: bridge
+    redis:
+        driver: bridge
+
+services:
+    agent:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            NEWRELIC_KEY: ""
+
+            POSTGRES_HOST_DB1: 172.18.0.1
+            POSTGRES_NAME_DB1: TEST-DB-1
+            POSTGRES_PORT_DB1: 5432
+            POSTGRES_USER_DB1: db_user
+            POSTGRES_PASS_DB1: db_pass
+            POSTGRES_DBNAME_DB1: db_db
+
+            REDIS_HOST_RD: 172.18.0.1
+            REDIS_NAME_RD: TEST-REDIS-1
+            REDIS_PORT_RD: 6379
+        volumes_from:
+            - sources:rw
+        depends_on:
+            - redis
+            - postgres
+
+    redis:
+        image: relaxart/kubernetes-redis-cluster
+        environment:
+          MASTER: "1"
+        ports:
+          - "6379:6379"
+        networks:
+            redis:
+                aliases:
+                    - redis
+
+    postgres:
+        image: postgres:9.5
+        environment:
+            POSTGRES_PASSWORD: db_pass
+            POSTGRES_USER: db_user
+            POSTGRES_DB: db_db
+        ports:
+            - 5432:5432
+        networks:
+            database:
+                aliases:
+                    - database
+
+    sources:
+        image: ubuntu
+        volumes:
+            - ./docker/newrelic_agent/:/usr/local/bin/agent/:rw

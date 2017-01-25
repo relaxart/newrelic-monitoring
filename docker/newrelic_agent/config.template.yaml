@@ -1,0 +1,162 @@
+%YAML 1.2
+---
+Application:
+  license_key: {{ NEWRELIC_KEY }}
+  wake_interval: 60
+  #newrelic_api_timeout: 10
+  #proxy: http://localhost:8080
+
+#  apache_httpd:
+#     -  name: hostname1
+#        scheme: http
+#        host: localhost
+#        port: 80
+#        path: /server-status
+#        #verify_ssl_cert: true
+#     -  name: hostname2
+#        scheme: http
+#        host: localhost
+#        port: 80
+#        path: /server-status
+#        #verify_ssl_cert: true
+
+#  couchdb:
+#     -  name: localhost
+#        host: localhost
+#        port: 5984
+#        #verify_ssl_cert: true
+#        #username: foo
+#        #password: bar
+#     -  name: localhost
+#        host: localhost
+#        port: 5984
+#        #verify_ssl_cert: true
+#        #username: foo
+#        #password: bar
+#
+#  elasticsearch:
+#    name: clustername
+#    host: localhost
+#    port: 9200
+
+#  haproxy:
+#    name: my-haproxy-server
+#    host: localhost
+#    port: 80
+#    path: /haproxy?stats;csv
+#    scheme: http
+#    #verify_ssl_cert: true
+#    #username: foo
+#    #password: bar
+
+#  mongodb:
+#    name: hostname
+#    host: localhost
+#    port: 27017
+#    admin_username: foo
+#    admin_password: bar
+#    databases:
+#      database_name_1:
+#        username: foo
+#        password: bar
+#      database_name_2:
+#        username: foo
+#        password: bar
+#
+#  memcached:
+#    - name: localhost
+#      host: localhost
+#      port: 11211
+#      path: /path/to/unix/socket
+#    - name: localhost
+#      host: localhost
+#      port: 11211
+#      path: /path/to/unix/socket
+#
+#  nginx:
+#    - name: hostname
+#      host: localhost
+#      port: 80
+#      path: /nginx_stub_status
+#      #verify_ssl_cert: true
+#    - name: hostname
+#      host: localhost
+#      port: 80
+#      path: /nginx_stub_status
+#      #verify_ssl_cert: true
+
+#  pgbouncer:
+#    - host: localhost
+#      port: 6000
+#      user: stats
+#
+#  php_apc:
+#     scheme: http
+#     host: localhost
+#     port: 80
+#     path: /apc-nrp.php
+#     #username: foo
+#     #password: bar
+#     #verify_ssl_cert: t
+#
+#  php_fpm:
+#    - name: fpm-pool
+#      scheme: https
+#      host: localhost
+#      port: 443
+#      path: /fpm_status
+#      query: json
+
+{% if configuration['postgres']|length > 0 %}
+  postgresql:
+{% for key, value in configuration['postgres'].iteritems() %}
+    - name: {{ value["NAME"] }}
+      host: {{ value["HOST"] | default('localhost') }}
+      port: {{ value["PORT"] | default('5432') }}
+      user: {{ value["USER"] }}
+      password: {{ value["PASS"] }}
+      dbname: {{ value["DBNAME"] }}
+      superuser: True
+{% endfor %}
+{% endif %}
+
+#  rabbitmq:
+#    - name: rabbitmq@localhost
+#      host: localhost
+#      port: 15672
+#      username: guest
+#      password: guest
+#      #verify_ssl_cert: true
+#      api_path: /api
+
+{% if configuration['redis']|length > 0 %}
+  redis:
+{% for key, value in configuration['redis'].iteritems() %}
+    - name: {{ value["NAME"] }}
+      host: {{ value["HOST"] | default('localhost') }}
+      port: {{ value["PORT"] | default('6379') }}
+      db_count: {{ value["DBCOUNT"] | default('16') }}
+      password: {{ value["PASSWORD"] }}
+      #path: /var/run/redis/redis.sock
+{% endfor %}
+{% endif %}
+
+#  riak:
+#    - name: localhost
+#      host: localhost
+#      port: 8098
+#      #verify_ssl_cert: true
+
+Logging:
+  formatters:
+    verbose:
+      format: '%(levelname) -10s %(asctime)s %(process)-6d %(processName) -15s %(threadName)-10s %(name) -45s %(funcName) -25s L%(lineno)-6d: %(message)s'
+  loggers:
+    newrelic_plugin_agent:
+      level: INFO
+      propagate: True
+      handlers: [console]
+    requests:
+      level: ERROR
+      propagate: True
+      handlers: [console]
