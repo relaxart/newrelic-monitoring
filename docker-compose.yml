@@ -24,6 +24,9 @@ services:
             NREDIS_HOST_RD: 172.18.0.1
             NREDIS_NAME_RD: TEST-REDIS-1
             NREDIS_PORT_RD: 6379
+
+            NRABBITMQ_HOST_NODE1: 172.18.0.1
+            NRABBITMQ_NAME_NODE1: RMQ-1
         volumes_from:
             - sources:rw
         depends_on:
@@ -40,6 +43,11 @@ services:
             redis:
                 aliases:
                     - redis
+
+    rabbitmq:
+        image: rabbitmq
+        ports:
+          - "15672:15672"
 
     postgres:
         image: postgres:9.5

@@ -120,14 +120,18 @@ Application:
 {% endfor %}
 {% endif %}
 
-#  rabbitmq:
-#    - name: rabbitmq@localhost
-#      host: localhost
-#      port: 15672
-#      username: guest
-#      password: guest
-#      #verify_ssl_cert: true
-#      api_path: /api
+{% if configuration['rabbitmq']|length > 0 %}
+  rabbitmq:
+{% for key, value in configuration['rabbitmq'].iteritems() %}
+    - name: {{ value["NAME"] }}
+      host: {{ value["HOST"] | default('localhost') }}
+      port: {{ value["PORT"] | default('15672') }}
+      username: {{ value["USER"] | default('guest') }}
+      password: {{ value["PASS"] | default('guest') }}
+      #verify_ssl_cert: true
+      api_path: {{ value["APIPATH"] | default('/api') }}
+{% endfor %}
+{% endif %}
 
 {% if configuration['redis']|length > 0 %}
   redis:

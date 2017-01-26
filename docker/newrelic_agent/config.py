@@ -32,6 +32,7 @@ def read_env_to_list(prefix):
 configuration = {}
 configuration['postgres'] = read_env_to_list("NPOSTGRES_")
 configuration['redis'] = read_env_to_list("NREDIS_")
+configuration['rabbitmq'] = read_env_to_list("NRABBITMQ_")
 
 template = templateEnv.get_template("config.template.yaml")
 templateVars = { 
